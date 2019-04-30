@@ -1,9 +1,13 @@
 #include "reload.hpp"
+
 #include <EGG/core/eggDvdRipper.hpp>
 #include <EGG/core/eggExpHeap.hpp>
-#include <lib/debug/debug.hpp>
-#include "../Prologue/prologue.hpp"
+
+#include <libpokey/debug.hpp>
+#include <modules/prologue/prologue.hpp>
+
 #include <revolution/pad.h>
+
 #include <kamek.h>
 
 
@@ -24,7 +28,7 @@ void reload()
 
 	DebugReport("---\nRELOADING\n---\n");
 
-	if (DVDOpen("Race/Course/draw_demo.szs", &fileInfo))
+	if (DVDOpen(PATH_PATCH_BIN, &fileInfo))
 	{
 		u32 fileLen = fileInfo.length;
 		DebugReport("File len: %u\n", fileLen);

@@ -1,5 +1,5 @@
 #include "demo.hpp"
-#include <lib\debug.hpp>
+#include <libpokey\debug.hpp>
 
 namespace Demo {
 

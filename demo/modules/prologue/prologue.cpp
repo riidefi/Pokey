@@ -5,9 +5,9 @@
 
 #include <Common/rk_types.h>
 
-#include <lib/debug/debug.hpp>
-#include <lib/heaps.hpp>
-#include <lib/environment.h>
+#include <libpokey/debug.h>
+#include <libpokey/heaps.hpp>
+#include <libpokey/environment.h>
 
 // for ctors
 #include <modules/demo/demo.hpp>

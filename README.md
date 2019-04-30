@@ -4,14 +4,29 @@
 </p>
 
 ## How does it work?
-C and C++ code is compiled and linked into a static object. A patch file is generated from the special Kamek object file section populated from hook macros.
+C and C++ code is compiled and linked into a static object as well as a supplemntary patch file containing precomputed hooks.
 
 ### Hooks
-TODO
+In any source file, to insert a call (bl) to a defined function:
+```c++
+kmCall(dest, symbol);
+```
+To branch (b):
+```c++
+kmBranch(dest, symbol);
+```
+To write a 32 bit value:
+```C++
+kmWrite32
+```
+More information can be found on <a href="https://github.com/Treeki/Kamek/blob/master/preproc_demo.cpp">Kamek's page</a>.
 
 ### Runtime
-which a runtime must load. A demo project that implements the patch files (and even reloading) has been included.
-### Demo
+The runtime must load the patch file. Support for 16 and 8 bit writes is planned. A demo project that implements the patch files and much more has been included (see section below).
+#### Patch format
+Patches are currently stored as a null terminated sequence of 32 bit address-value pairs.
+
+## Project Format
 TODO
 
 ## Usage
@@ -19,7 +34,6 @@ To build a project:
 ```
 pokey_frontend.py <project_path> [debug|release]
 ```
-TODO: Add information about project files
 
 ## Demo
 A demo project has been provided. This project is for the PAL release of Mario Kart Wii.

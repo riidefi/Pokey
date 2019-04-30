@@ -1,15 +1,11 @@
 #include "reload.hpp"
+#include <kamek.h>
 
-#include <EGG/core/eggDvdRipper.hpp>
-#include <EGG/core/eggExpHeap.hpp>
-
-#include <libpokey/debug.hpp>
+#include <libpokey/debug.h>
 #include <modules/prologue/prologue.hpp>
 
 #include <revolution/pad.h>
-
-#include <kamek.h>
-
+#include <EGG/core/eggExpHeap.hpp>
 
 #ifdef DEBUG
 
@@ -21,24 +17,24 @@ void reload()
 	bool success = false;
 	u8* block = (u8*)0x809c4fa0;//getBlock();
 
-	DebugReport("block: %p\n", block);
+	PokeyDebugReport("block: %p\n", block);
 
 
 
 
-	DebugReport("---\nRELOADING\n---\n");
+	PokeyVerboseReport("---\nRELOADING\n---\n");
 
 	if (DVDOpen(PATH_PATCH_BIN, &fileInfo))
 	{
 		u32 fileLen = fileInfo.length;
-		DebugReport("File len: %u\n", fileLen);
+		PokeyDebugReport("File len: %u\n", fileLen);
 		u32 fileLen32 = OSRoundUp32B(fileLen);
-		DebugReport("File len (rounded): %u\n", fileLen32);
+		PokeyDebugReport("File len (rounded): %u\n", fileLen32);
 		u32 amountRead = DVDRead(&fileInfo, block, fileLen32, 0);
 		DVDClose(&fileInfo);
 		if (fileLen <= amountRead)
 		{
-			DebugReport("Loaded file!\n");
+			PokeyDebugReport("Loaded file!\n");
 			success = true;
 		}
 	}
@@ -47,10 +43,10 @@ void reload()
 #if 0
 		patchEntry* entry = getPatchEntries();
 
-		DebugReport("--- Rollback %u patches ---\n", getPatchCursor());
+		PokeyDebugReport("--- Rollback %u patches ---\n", getPatchCursor());
 		for (int i = 0; i < getPatchCursor(); i++)
 		{
-			DebugReport("-> %p was 0x%08x now 0x%08x. reverting.\n", entry->addr, entry->oldVal, *(u32*)entry->addr);
+			PokeyDebugReport("-> %p was 0x%08x now 0x%08x. reverting.\n", entry->addr, entry->oldVal, *(u32*)entry->addr);
 			doPatch32((void*)entry);
 			entry++;
 		}
@@ -58,17 +54,17 @@ void reload()
 	}
 	else
 	{
-		DebugReport("Reload Failed!!\n");
+		PokeyDebugReport("Reload Failed!\n");
 	}
 
 	
-	DebugReport("Calling prologue: %p\n", block);
+	PokeyDebugReport("Calling prologue: %p\n", block);
 
 
 	// Call the prologue, again. this will load patches
 	((u32(*)(void))block)();
 
-	DebugReport("Reload Success!\n");
+	PokeyDebugReport("Reload Success!\n");
 	OSRestoreInterrupts(iState);
 }
 

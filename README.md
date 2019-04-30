@@ -3,6 +3,17 @@
   <img src="https://github.com/riidefi/Pokey/blob/master/banner.png">
 </p>
 
+## How does it work?
+C and C++ code is compiled and linked into a static object. A patch file is generated from the special Kamek object file section populated from hook macros.
+
+### Hooks
+TODO
+
+### Runtime
+which a runtime must load. A demo project that implements the patch files (and even reloading) has been included.
+### Demo
+TODO
+
 ## Usage
 To build a project:
 ```

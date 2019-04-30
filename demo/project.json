@@ -1,0 +1,11 @@
+{
+    "modules": [ "demo" ],
+    "includes": [
+        "$MKW_DECOMP_ROOT",
+        "$RVL_DECOMP_ROOT",
+        "$MSL_ROOT",
+        "$EABI_ROOT"
+    ],
+    "externals": "RMCP01.txt",
+    "static": "0x809c4fa0"
+}

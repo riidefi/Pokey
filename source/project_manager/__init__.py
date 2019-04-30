@@ -10,9 +10,11 @@ cwFlags = "-proc gekko -I- -Cpp_exceptions off -enum int -Os -use_lmw_stmw on -f
 cwFlags += " -DRVL -DNDEBUG -DRVL_SDK -DTRK_INTEGRATION -DRVL_OS -DEPPC -DGEKKO -DHOLLYWOOD_REV=1 -DBROADWAY_REV=1 -DIOP_REV=1 -DNW4R_RELEASE -DNW4R_CW3 -DNW4R_RVL"
 
 class ProjectManager:
-    def __init__(self, path):
+    def __init__(self, path, verbose=False):
         # Set our project path
         self.project_path = path
+
+        self.verbose = verbose
 
         # Load our configuration
         with open(os.path.join(path, "project.json"), "r") as file:
@@ -87,7 +89,8 @@ class ProjectManager:
         # Load our module config
         module_cfg = json.load(open("./modules/%s/module.json" % module, "r"))
 
-        print("Compiling module %s..." % module)
+        if self.verbose:
+            print("Compiling module %s..." % module)
 
         # Create our module bin folder
         if not os.path.isdir("./modules/%s/bin" % module):
@@ -106,7 +109,7 @@ class ProjectManager:
             print("...compiling %s" % file)
             compiler_string = "./mwcceppc.exe %s -c -o %s/modules/%s/bin/%s.o %s/modules/%s/%s" % (
                 cwArg, self.project_path, module, file, self.project_path, module, file)
-            if verbose:
+            if self.verbose:
                 print(compiler_string)
             if subprocess.call(compiler_string):
                 raise RuntimeError("[FATAL] Failed to compile %s!", file)

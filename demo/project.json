@@ -1,5 +1,5 @@
 {
-    "modules": [ "demo" ],
+    "modules": [ "prologue", "reload", "demo" ],
     "includes": [
         "$MKW_DECOMP_ROOT",
         "$RVL_DECOMP_ROOT",

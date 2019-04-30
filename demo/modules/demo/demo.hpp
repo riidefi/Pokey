@@ -9,4 +9,9 @@ extern "C"
     void OSReport(const char* str, ...);
 }
 
+namespace Demo {
+
+void applyProcessBar();
 void prologue();
+
+} // namespace Demo

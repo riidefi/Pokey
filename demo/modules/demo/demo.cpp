@@ -1,10 +1,7 @@
 #include "demo.hpp"
 #include <lib\debug.hpp>
 
-
-// The first function will be the entry point.
-
-void applyProcessBar();
+namespace Demo {
 
 void prologue()
 {
@@ -22,6 +19,17 @@ void prologue()
 	OSRestoreInterrupts(iState);
 }
 
+
+/*-------------------------------------------------------
+
+NOTE:
+- Patches are only done this way for demonstration.
+- Using kamek macros would be preferable!
+
+-------------------------------------------------------*/
+
+
+
 inline void Write32(void* addr, u32 val)
 { __asm {
 	stw r4, 0(r3); // store value
@@ -32,7 +40,6 @@ inline void Write32(void* addr, u32 val)
 	icbi 0, r3;
 	isync;
 } }
-
 
 void applyProcessBar()
 {
@@ -49,3 +56,5 @@ void applyProcessBar()
 	Write32((void*)0x8000979C, 0x4823912C);
 	Write32((void*)0x802428E4, 0x4BDC6EC4);
 }
+
+} // namespace Demo

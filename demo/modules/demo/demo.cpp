@@ -1,4 +1,4 @@
-#include "main.hpp"
+#include "demo.hpp"
 #include <lib\debug.hpp>
 
 
@@ -44,8 +44,8 @@ void applyProcessBar()
 	0400979C 4823912C
 	042428E4 4BDC6EC4
 	*/
-	Write32(0x80009600, 0x48239100);
-	Write32(0x8024271C, 0x4BDC6EF0);
-	Write32(0x8000979C, 0x4823912C);
-	Write32(0x802428E4, 0x4BDC6EC4);
+	Write32((void*)0x80009600, 0x48239100);
+	Write32((void*)0x8024271C, 0x4BDC6EF0);
+	Write32((void*)0x8000979C, 0x4823912C);
+	Write32((void*)0x802428E4, 0x4BDC6EC4);
 }

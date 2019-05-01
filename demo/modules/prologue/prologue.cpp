@@ -12,6 +12,7 @@
 // for ctors
 #include <modules/demo/demo.hpp>
 
+namespace Prologue {
 
 void applyPatches(u32* block);
 void doPatch32(void* patch);
@@ -135,3 +136,5 @@ inline void doPatch32(void* patch)
 		isync
 	}
 }
+
+} // namespace Prologue

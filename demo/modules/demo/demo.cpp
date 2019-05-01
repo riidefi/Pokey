@@ -1,4 +1,3 @@
-#include "demo.hpp"
 #include <libpokey\debug.hpp>
 
 namespace Demo {

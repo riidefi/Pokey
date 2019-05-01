@@ -1,5 +1,5 @@
 #include "reload.hpp"
-#include <kamek.h>
+#include <libpokey/hooks.h>
 
 #include <libpokey/debug.h>
 #include <modules/prologue/prologue.hpp>
@@ -7,6 +7,7 @@
 #include <revolution/pad.h>
 #include <EGG/core/eggExpHeap.hpp>
 
+namespace Reload {
 #ifdef DEBUG
 
 void reload()
@@ -80,8 +81,9 @@ void loopAdditions()
 	}
 
 }
-kmBranch(0x80009824, loopAdditions);
+PokeyBranch(0x80009824, loopAdditions);
 #endif
 
 
 #endif
+} // namespace Reload

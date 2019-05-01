@@ -1,5 +1,4 @@
-#define PAL
-#include <kamek.h>
+#include <lib/hooks.h>
 
 #include <lib/debug.hpp>
 #include <lib/heaps.hpp>
@@ -9,8 +8,7 @@
 #include <EGG/core/eggExpHeap.hpp>
 #include <EGG/core/eggDvdRipper.hpp>
 
-
-bool myCallModule(System::ModuleLinker* linker, int moduleID)
+kmBranchDefCpp(0x80007B5C, bool, System::ModuleLinker* linker, int moduleID)
 {
 	u8* block;
 	// Before we call the module, let's add our code
@@ -35,5 +33,3 @@ bool myCallModule(System::ModuleLinker* linker, int moduleID)
 	// Call down to the original module
 	linker->callModule(moduleID);
 }
-
-kmCall(0x80007B5C, myCallModule);

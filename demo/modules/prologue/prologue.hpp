@@ -15,7 +15,9 @@ patchEntry* getPatchEntries();
 int getPatchCursor();
 #endif
 
+namespace Prologue {
 
 //! @brief apply the patches
 void applyPatches(u32* block);
 
+} // namespace Prologue

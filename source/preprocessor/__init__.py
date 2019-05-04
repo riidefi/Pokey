@@ -5,7 +5,7 @@ def process_string(config, x):
     This is necessary especially for the heavily used $DECOMP_ROOT variable.
     """
 
-    for key, val in config.variables.items():
-        x = x.replace(key, val)
+    for key, item in config.variables.items():
+        x = x.replace(key, item)
 
     return x

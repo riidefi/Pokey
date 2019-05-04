@@ -5,9 +5,11 @@ from shutil import copyfile
 
 from source.preprocessor import process_string
 from source.config import Config
+from source.patch_generator import PatchGenerator
 
 cwFlags = "-proc gekko -I- -Cpp_exceptions off -enum int -Os -use_lmw_stmw on -fp hard -rostr -sdata 0 -sdata2 0"
 cwFlags += " -DRVL -DNDEBUG -DRVL_SDK -DTRK_INTEGRATION -DRVL_OS -DEPPC -DGEKKO -DHOLLYWOOD_REV=1 -DBROADWAY_REV=1 -DIOP_REV=1 -DNW4R_RELEASE -DNW4R_CW3 -DNW4R_RVL"
+
 
 class ProjectManager:
     def __init__(self, path, verbose=False):
@@ -21,7 +23,7 @@ class ProjectManager:
             self.project_cfg = json.load(file)
 
         self.global_config = Config()
-        self.global_config.fromFile(os.path.join(self.project_path, "global_config.json"))
+        self.global_config.fromFile(os.path.join(self.project_path, "..\\global_config.json"))
 
         # Process our project includes ahead of time
         self.project_includes = " ".join(("-I%s" % process_string(self.global_config, i)) for i in self.project_cfg["includes"])
@@ -63,7 +65,8 @@ class ProjectManager:
                 # TODO: bin subfolder not auto created!
                 compiler_string = "./mwcceppc.exe %s -c -o %s/lib/bin/%s.o %s/lib/%s" % (
                     cwArg, self.project_path, file, self.project_path, file)
-                print(compiler_string)
+                if self.verbose:
+                    print(compiler_string)
                 if subprocess.call(compiler_string):
                     raise RuntimeError("[FATAL] Failed to compile %s!", file)
                 else:
@@ -151,8 +154,11 @@ class ProjectManager:
             raise RuntimeError("Kamek fail")
         else:
             copyfile(self.project_path + "\\bin\\%s\\CODE.bin" % mode,
-                     CODE_DEPLOY_BIN)
+                     self.global_config.paths["CODE_DEPLOY"])
             with open(self.project_path + "\\bin\\gecko.txt", "r") as gecko:
-                producePatch(gecko.readlines(), self.project_path + "\\bin\\PATCH.bin")
+                pg = PatchGenerator()
+                pg.process()
+                pg.write_to_file(self.project_path + "\\bin\\PATCH.bin")
+                
             copyfile(self.project_path + "\\bin\\PATCH.bin",
-                     PATCH_DEPLOY_PATH)
+                     self.global_config.paths["PATCH_DEPLOY"])

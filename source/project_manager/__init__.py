@@ -124,6 +124,27 @@ class ProjectManager:
 
         return result
 
+    def apply_paddding_absolute(self, source_file, dest_filesize):
+            source_file_read = open(source_file, 'rb').read()
+            source_filesize = len(source_file_read)
+            
+            print("Applying padding...:\n\tSource Filesize: %s\n\tTarget Filesize: %s" % (source_filesize, dest_filesize))
+
+            if source_filesize > dest_filesize:
+                raise ValueError("Source filesize exceeds target padded size. Consider adding compression to debug target or increasing target filesize.")
+            elif source_filesize == dest_filesize:
+                print("\n---\n\nSource file size matches target filesize. No padding applied.\n\n---\n")
+            else:
+                open(source_file, 'wb').write(source_file_read + bytes([0] * (dest_filesize - source_filesize)))
+
+    def apply_paddding_relative(self, source_file, amount):
+        source_file_read = open(source_file, 'rb').read()
+        source_filesize = len(source_file_read)
+        
+        print("Applying padding...:\n\tSource Filesize: %s\n\tRelative Padding Size: %s\n\tComputed Target Filesize: %s" % (source_filesize, amount, source_filesize+amount))
+        
+        open(source_file, 'wb').write(source_file_read + bytes([0] * amount))
+
     def build(self, release=False):
         """
         Build the project!
@@ -144,19 +165,24 @@ class ProjectManager:
 
         os.chdir(self.project_path + "/../tool/")
 
+        code_file = self.project_path + "\\bin\\%s\\CODE.bin" % mode
+
         kamek_command = "Kamek.exe %s -static=%s -output-gecko=%s -output-code=%s -externals=%s/externals/%s" % (
                         " ".join(objects), self.project_cfg["static"], self.project_path + "\\bin\\gecko.txt",
-                        self.project_path + "\\bin\\%s\\CODE.bin" % mode, self.project_path, self.project_cfg["externals"])
-
-        print(kamek_command)
+                        code_file, self.project_path, self.project_cfg["externals"])
+        if self.verbose:
+            print(kamek_command)
 
         if subprocess.call(kamek_command):
             raise RuntimeError("Kamek fail")
         else:
-            copyfile(self.project_path + "\\bin\\%s\\CODE.bin" % mode,
-                     self.global_config.paths["CODE_DEPLOY"])
+            # TODO: this is far from optimal. add padding bytes for sbss/bss
+            self.apply_paddding_relative(code_file, 1024)
+
+            copyfile(code_file, self.global_config.paths["CODE_DEPLOY"])
             with open(self.project_path + "\\bin\\gecko.txt", "r") as gecko:
                 pg = PatchGenerator()
+                pg.parse_gecko(gecko.readlines())
                 pg.process()
                 pg.write_to_file(self.project_path + "\\bin\\PATCH.bin")
                 

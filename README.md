@@ -14,13 +14,13 @@ The runtime must load the compiled code file. Runtime 2.0 also comes with Univer
 
 ## Project Format
 
-###Project Configuration File
+### Project Configuration File
 The project configuration file (`project.json`) ties everything together, including: the module registration list, global includes, the path to external symbols, and the static base to link code at.
 
-###The Library (`lib`) Folder
+### The Library (`lib`) Folder
 The library folder houses module-independent code and external precompiled object files which will be compiled and linked when building. The library `build.json` file directs this process.
 
-###Modules
+### Modules
 Pokey projects are divided into modules. Each module must have a `module.json` file, which enumerates source files to build and  (optional) additional includes.
 
 ## Usage
